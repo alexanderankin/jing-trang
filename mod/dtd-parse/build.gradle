@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':mod:util')
+    implementation project(':mod:resolver')
+}

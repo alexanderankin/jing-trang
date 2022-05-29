@@ -1,0 +1,114 @@
+import java.nio.file.Files
+
+configurations { javacc }
+
+dependencies {
+    implementation(project(':mod:util'))
+    implementation(project(':mod:resolver'))
+    implementation(project(':mod:datatype'))
+    javacc ':javacc:'
+}
+
+def genSrc = project.buildDir.toPath()
+        .resolve('generated')
+        .resolve('sources')
+        .resolve('javacc') // tool (usually 'annotationProcessor')
+        .resolve('java') // type (usually 'java')
+        .resolve('main') // sourceSet
+
+sourceSets {
+    main {
+        java.srcDir genSrc
+    }
+}
+
+// per package defined in CompactSyntax.jj
+def pkgPath = genSrc.resolve('com/thaiopensource/relaxng/parse/compact')
+
+def javaCc = tasks.register('javaCc', JavaExec) {
+    classpath(configurations.javacc)
+    mainClass = 'javacc'
+    args '-OUTPUT_DIRECTORY=' + pkgPath
+    args 'src/main/com/thaiopensource/relaxng/parse/compact/CompactSyntax.jj'
+    outputs.dir pkgPath
+
+    doLast {
+        project.delete(pkgPath.resolve('JavaCharStream.java'))
+        def toFix = pkgPath.resolve('CompactSyntaxTokenManager.java')
+        def fixed = Files.readString(toFix).replaceAll('java.io.IOException', 'EOFException')
+        Files.writeString(toFix, fixed)
+    }
+}
+
+tasks.named('compileJava').configure {
+    dependsOn javaCc
+}
+
+/*
+> Task :mod:rng-parse:hi FAILED
+Java Compiler Compiler Version 4.1 (Parser Generator)
+
+Usage:
+    javacc option-settings inputfile
+
+"option-settings" is a sequence of settings separated by spaces.
+Each option setting must be of one of the following forms:
+
+    -optionname=value (e.g., -STATIC=false)
+    -optionname:value (e.g., -STATIC:false)
+    -optionname       (equivalent to -optionname=true.  e.g., -STATIC)
+    -NOoptionname     (equivalent to -optionname=false. e.g., -NOSTATIC)
+
+Option settings are not case-sensitive, so one can say "-nOsTaTiC" instead
+of "-NOSTATIC".  Option values must be appropriate for the corresponding
+option, and must be either an integer, a boolean, or a string value.
+
+The integer valued options are:
+
+    LOOKAHEAD              (default 1)
+    CHOICE_AMBIGUITY_CHECK (default 2)
+    OTHER_AMBIGUITY_CHECK  (default 1)
+
+The boolean valued options are:
+
+    STATIC                 (default true)
+    DEBUG_PARSER           (default false)
+    DEBUG_LOOKAHEAD        (default false)
+    DEBUG_TOKEN_MANAGER    (default false)
+    ERROR_REPORTING        (default true)
+    JAVA_UNICODE_ESCAPE    (default false)
+    UNICODE_INPUT          (default false)
+    IGNORE_CASE            (default false)
+    COMMON_TOKEN_ACTION    (default false)
+    USER_TOKEN_MANAGER     (default false)
+    USER_CHAR_STREAM       (default false)
+    BUILD_PARSER           (default true)
+    BUILD_TOKEN_MANAGER    (default true)
+    TOKEN_MANAGER_USES_PARSER (default false)
+    SANITY_CHECK           (default true)
+    FORCE_LA_CHECK         (default false)
+    CACHE_TOKENS           (default false)
+    KEEP_LINE_COLUMN       (default true)
+
+The string valued options are:
+
+    OUTPUT_DIRECTORY       (default Current Directory)
+    TOKEN_EXTENDS          (default java.lang.Object)
+    TOKEN_FACTORY          (default none)
+    JDK_VERSION            (default 1.5)
+
+EXAMPLE:
+    javacc -STATIC=false -LOOKAHEAD:2 -debug_parser mygrammar.jj
+
+
+Execution failed for task ':mod:rng-parse:hi'.
+> Process 'command '/home/toor/.sdkman/candidates/java/11.0.2-open/bin/java'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+
+
+ */

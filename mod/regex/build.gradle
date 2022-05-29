@@ -1,0 +1,42 @@
+import java.nio.file.Paths
+
+configurations {
+    genscript
+}
+
+dependencies {
+    implementation project(':mod:util')
+    implementation 'xerces:xercesImpl:1.2'
+    genscript project(':mod:regex-gen')
+}
+
+def sources = project.buildDir.toPath().resolve('generated').resolve('sources')
+def naming = sources.resolve(Paths.get('naming', 'java', 'main'))
+def categories = sources.resolve(Paths.get('categories', 'java', 'main'))
+
+sourceSets {
+    main {
+        java.srcDirs naming, categories
+    }
+}
+
+def namingGen = tasks.register('namingGen', JavaExec) {
+    classpath(configurations.genscript)
+    mainClass = 'com.thaiopensource.datatype.xsd.regex.java.gen.NamingExceptionsGen'
+    def outClass = 'com.thaiopensource.datatype.xsd.regex.java.NamingExceptions'
+    args outClass
+    naming.resolve(outClass.replaceAll('\\.', '/')).toFile().mkdirs()
+    args naming.toString()
+}
+
+def categoriesGen = tasks.register('categoriesGen', JavaExec) {
+    classpath(configurations.genscript)
+    mainClass = 'com.thaiopensource.datatype.xsd.regex.java.gen.CategoriesGen'
+    def outClass = 'com.thaiopensource.datatype.xsd.regex.java.Categories'
+    args outClass
+    categories.resolve(outClass.replaceAll('\\.', '/')).toFile().mkdirs()
+    args categories.toString()
+    args rootProject.projectDir.toPath().resolve('lib').resolve('UnicodeData-3.1.0.txt').toAbsolutePath().toString()
+}
+
+tasks.compileJava.dependsOn namingGen, categoriesGen

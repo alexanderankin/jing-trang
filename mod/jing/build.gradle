@@ -1,0 +1,25 @@
+dependencies {
+    implementation(project(':mod:util'))
+    implementation(project(':mod:resolver'))
+    implementation(project(':mod:catalog'))
+    implementation(project(':mod:regex'))
+    implementation(project(':mod:datatype'))
+    implementation(project(':mod:xsd-datatype'))
+    implementation(project(':mod:rng-parse'))
+    implementation(project(':mod:pattern'))
+    implementation(project(':mod:jaxp'))
+    implementation(project(':mod:rng-jaxp'))
+    implementation(project(':mod:rng-validate'))
+    implementation(project(':mod:nvdl'))
+    implementation(project(':mod:schematron'))
+    implementation(project(':mod:xerces'))
+    implementation(project(':mod:picl'))
+    implementation(project(':mod:rng-jarv'))
+    // the order is important,
+    // because it controls the order of the service providers;
+    //
+    // validate should be last
+    // because it provides fallback implementations
+    // in terms of other interfaces
+    implementation(project(':mod:validate'))
+}

@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(':mod:util')
+    implementation project(':mod:resolver')
+    implementation project(':mod:catalog')
+    implementation project(':mod:datatype')
+    implementation project(':mod:rng-parse')
+    implementation project(':mod:pattern')
+    implementation project(':mod:validate')
+    implementation ':ant:'
+    implementation ':resolver:'
+}

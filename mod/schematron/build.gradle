@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(':mod:util')
+    implementation project(':mod:resolver')
+    implementation project(':mod:validate')
+    implementation project(':mod:rng-validate')
+    implementation project(':mod:pattern')
+    implementation ':xalan:'
+    // implementation ':saxon:'
+    implementation ':saxon9:'
+}

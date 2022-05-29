@@ -1,0 +1,32 @@
+def libDir = file('../lib')
+
+subprojects {
+    apply plugin: 'java'
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main']
+            // resources.srcDirs = ['src']
+        }
+
+        test {
+            java.srcDirs = ['src/test']
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        // options.compilerArgs += ['-Xlint:all']
+    }
+
+    repositories {
+        flatDir { dir libDir }
+        mavenCentral()
+    }
+
+
+}
+// task 'hi'  {
+//     doLast {
+//         println file('../lib').toPath().toAbsolutePath()
+//     }
+// }

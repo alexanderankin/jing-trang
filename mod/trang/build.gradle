@@ -1,0 +1,17 @@
+dependencies {
+    implementation project(':mod:util')
+    implementation project(':mod:resolver')
+    implementation project(':mod:catalog')
+    implementation project(':mod:regex')
+    implementation project(':mod:datatype')
+    implementation project(':mod:xsd-datatype')
+    implementation project(':mod:rng-parse')
+    implementation project(':mod:dtd-parse')
+    implementation project(':mod:infer')
+    implementation project(':mod:rng-schema')
+    implementation project(':mod:convert-from-xml')
+    implementation project(':mod:convert-to-xsd')
+    implementation project(':mod:convert-from-dtd')
+    implementation project(':mod:convert-to-dtd')
+    implementation ':resolver:'
+}

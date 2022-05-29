@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(':mod:util')
+    implementation project(':mod:resolver')
+    implementation project(':mod:datatype')
+    implementation project(':mod:xsd-datatype')
+    implementation project(':mod:regex')
+}

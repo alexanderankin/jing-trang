@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(':mod:util')
+    implementation project(':mod:resolver')
+    // implementation 'xerces:xercesImpl:1.2'
+    implementation 'xml-resolver:xml-resolver:1.2'
+
+}

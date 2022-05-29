@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':mod:util')
+    implementation project(':mod:validate')
+    implementation ':xercesImpl:'
+}
