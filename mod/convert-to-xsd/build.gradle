@@ -3,3 +3,37 @@ dependencies {
     implementation project(':mod:datatype')
     implementation project(':mod:rng-schema')
 }
+
+// add resources inside main folder, but only the specific folder
+sourceSets.main.resources {
+    srcDirs += 'src/main'
+    include('com/thaiopensource/relaxng/output/xsd/resources/')
+}
+
+sourceSets.test {
+    java.srcDir 'test'
+    resources.srcDir 'test'
+}
+
+dependencies {
+    // testImplementation ':testng:'
+    // testImplementation 'org.testng:testng:5.8-jdk15'
+    // implementation 'ch.qos.logback:logback-classic:1.2.10'
+    // testImplementation 'ch.qos.logback:logback-classic:1.2.10'
+    testImplementation 'org.testng:testng:5.8:jdk15'
+}
+
+tasks.register('testJar', Jar) { from sourceSets.test.output }
+
+tasks.register('ok', JavaExec) {
+    it.group 'verification'
+    it.description 'run xsd tests'
+    it.classpath configurations.testRuntimeClasspath, configurations.runtimeClasspath, sourceSets.main.output.files
+    it.mainClass.set 'org.testng.TestNG'
+    // it.args '-testjar', tasks.testJar.outputs.files.getSingleFile().toPath().toAbsolutePath().toString()
+    // it.args '-xmlpathinjar', 'toxsdtest.xml'
+    // it.args 'toxsdtest.xml', tasks.testJar.outputs.files.getSingleFile().toPath().toAbsolutePath().toString()
+    // it.args '-h'
+
+    it.dependsOn tasks.testJar
+}

@@ -3,4 +3,26 @@ dependencies {
     implementation project(':mod:resolver')
     implementation project(':mod:validate')
     implementation project(':mod:rng-validate')
+    // testImplementation 'org.testng:testng:5.8:jdk15'
+    testImplementation ':testng:'
+}
+
+tasks.register('runTests', JavaExec) {
+    it.classpath configurations.testRuntimeClasspath
+    // it.mainClass.set
+}
+// task 'sometask' {
+//     doLast {
+//         fileTree('test').iterator().forEachRemaining(e -> println(e));
+//     }
+// }
+
+test {
+    useTestNG(new Action<TestNGOptions>() {
+        @Override
+        void execute(TestNGOptions testNGOptions) {
+            // testNGOptions.suiteXmlFiles.add(fileTree('../../test'))
+            testNGOptions.suiteXmlFiles.add(fileTree('test'))
+        }
+    })
 }

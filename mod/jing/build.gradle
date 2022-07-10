@@ -1,3 +1,8 @@
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
 dependencies {
     implementation(project(':mod:util'))
     implementation(project(':mod:resolver'))
@@ -22,4 +27,8 @@ dependencies {
     // because it provides fallback implementations
     // in terms of other interfaces
     implementation(project(':mod:validate'))
+}
+
+application {
+    mainClass.set 'com.thaiopensource.relaxng.util.Driver'
 }
