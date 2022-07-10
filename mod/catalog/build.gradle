@@ -4,4 +4,12 @@ dependencies {
     // implementation 'xerces:xercesImpl:1.2'
     implementation 'xml-resolver:xml-resolver:1.2'
 
+    testImplementation 'org.testng:testng:7.6.1'
+}
+
+// add src/test to resources roots (including non-java/non-class files)
+sourceSets.test.resources.srcDirs += 'src/test'
+
+test {
+    useTestNG()
 }
